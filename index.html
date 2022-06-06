@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Top 10 Cryptocurrencies</title>
+</head>
+
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+        th {
+            color: #fff;
+        }
+
+        .table td,th {
+            text-align: center;
+        }
+        
+    </style>
+
+    <table class="table table-striped">
+        <tr class="bg-info">
+            <th>Rank</th>
+            <th>Coin Name</th>
+            <th>Price</th>
+            <th>Market Cap</th>
+        </tr>
+
+        <tbody id="myTable">
+
+        </tbody>
+    </table>
+
+
+    <script>
+
+        var myArray = []
+
+
+        $.ajax({
+            method: 'GET',
+            url: 'http://localhost:3000/api/price-feed',
+            success: function (response) {
+                myArray = response.result
+                buildTable(myArray)
+                console.log(myArray)
+            }
+        })
+
+        function buildTable(result) {
+            var table = document.getElementById('myTable')
+
+            for (var i = 0; i < 10; i++) {
+                var row = `<tr>
+							<td>${result[i].rank}</td>
+							<td>${result[i].name}</td>
+							<td>${result[i].price}</td>
+                            <td>${result[i].marketCap}</td>
+					      </tr>`
+                table.innerHTML += row
+
+            }
+        }
+
+        function loadlink() {
+            $('#links').load('index.html', function () {
+                $(this).unwrap();
+            });
+        }
+
+        loadlink(); // This will run on page load
+        setInterval(function () {
+            loadlink() // this will run after every 5 seconds
+        }, 1000);
+
+    </script>
+</body>
+
+</html>
